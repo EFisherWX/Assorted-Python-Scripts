@@ -55,7 +55,7 @@ ax = plt.axes(projection=ccrs.Mercator()) # Change CRS here as needed
 ax.add_feature(cfeature.BORDERS)
 ax.add_feature(cfeature.STATES, linewidth=1, zorder=12)
 
-reader = shpreader.Reader('./Shapefiles/cb_2018_us_county_5m.shp')
+reader = shpreader.Reader('https://raw.githubusercontent.com/EFisher828/geojson-store/main/CONUS%20Counties.geojson')
 counties = list(reader.geometries())
 COUNTIES = cfeature.ShapelyFeature(counties, ccrs.PlateCarree())
 ax.add_feature(COUNTIES, facecolor='none',linewidth=0.2, zorder=12)
@@ -67,7 +67,9 @@ norm = BoundaryNorm(levels, cmap.N)
 
 conus = [-127.11,-64.81,23.82,49.97]
 southern_apps = [-85.0302,-80.3544,34.509,36.7941]
-ax.set_extent(southern_apps,ccrs.PlateCarree())
+wv_va = [-82.3495,-77.6737,37.362,39.5639]
+extent = wv_va
+ax.set_extent(extent,ccrs.PlateCarree())
 
 # Data feed
 ds = xr.open_dataset(model_dict[model]['url'])
@@ -82,7 +84,7 @@ for time in ds.time:
     x = gust.lon
     y = gust.lat
     
-    indexList = findIndex([-85.0302-0.2,-80.3544+0.2,34.509-0.2,36.7941+0.2],x,y)
+    indexList = findIndex([extent[0]-0.1,extent[1]+0.1,extent[2]-0.1,extent[3]+0.1],x,y)
     
     gust = gust[indexList[2]:indexList[3],indexList[0]:indexList[1]]
     
@@ -106,7 +108,6 @@ for time in ds.time:
         
     plt.savefig(f'./{model} Gusts/{timeString}.png',dpi=300,bbox_inches='tight')
     
-    #cs.remove()
     
     for coll in cs.collections:
         coll.remove()
