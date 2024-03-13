@@ -10,10 +10,9 @@ from datetime import datetime
 
 # This script will take some time to run
 # Data is available back to October 1979
-# Please change the following rows before running:
-# Inputs - 114, 115, 119, 147
-# Features - 173
-# Outputs - 198
+# Please adjust the following rows as desired before running:
+# Inputs - 51, 52, 56, 133
+# Outputs - 141
 
 def createMap(extent):
     # Initialize map
